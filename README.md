@@ -6,7 +6,8 @@ values at a sparse collection of indices, using storage
 linear in the number of stored values. Values are
 created and initialized on first assignment.
 
-* `lazy_vec` [API](/BartMassey/target/doc/lazy_vec/index.html)
+Full Rustdoc documentation is provided. GitHub makes it too
+painful to actually point to it from here.
 
 This crate requires unstable features and is only known to
 work with Rust 1.23.0-nightly as of 2017-11-11. Later
