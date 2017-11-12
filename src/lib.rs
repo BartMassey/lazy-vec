@@ -1,37 +1,46 @@
 #![feature(unique, alloc, core_intrinsics)]
 
-///! A "lazy array" is a self-initializing array: it can be
+///! A "lazy vector" is a self-initializing vector: it can be
 ///! created in constant time, but still has constant-time
 ///! read and write. It initializes an element on first
 ///! write, and occupies space proportional to the number of
 ///! written elements.
+///!
+///! # Examples
+///! ```
+///! use lazy_vec::*;
+///! 
+///! let mut a: LazyVec<i8> = LazyVec::new();
+///! a.write(77, -12i8);
+///! assert_eq!(a.read(77), -12i8);
+///! ```
 
 extern crate alloc;
 
 use std::ptr;
 use alloc::raw_vec::RawVec;
 
-///! This opaque structure stores a lazy array.
-pub struct LazyArray<T> {
+///! This opaque structure stores a lazy vector.
+pub struct LazyVec<T> {
     // Highest index currently stored.
     size: usize,
-    // Stack of actual array values.
+    // Stack of actual vector values.
     values: Vec<T>,
     // Parallel stack indicating, for each value, what index
     // it is located at. Used during reads and writes to
     // check for need to initialize.
     value_indices: Vec<usize>,
-    // When a read or write is performed, this array is
+    // When a read or write is performed, this vector is
     // indirected through to do the initialization and/or
     // access.
     indices: RawVec<usize>
 }
 
-impl <T: Copy> LazyArray<T> {
+impl <T: Copy> LazyVec<T> {
 
-    ///! Allocate a new empty `LazyArray`.
-    pub fn new() -> LazyArray<T> {
-        LazyArray {
+    ///! Allocate a new empty `LazyVec`.
+    pub fn new() -> LazyVec<T> {
+        LazyVec {
             size: 0,
             values: Vec::new(),
             value_indices: Vec::new(),
@@ -39,10 +48,10 @@ impl <T: Copy> LazyArray<T> {
         }
     }
 
-    ///! Allocate a new empty `LazyArray` with the given
+    ///! Allocate a new empty `LazyVec` with the given
     ///! starting index capacity.
-    pub fn with_capacity(cap: usize) -> LazyArray<T> {
-        LazyArray {
+    pub fn with_capacity(cap: usize) -> LazyVec<T> {
+        LazyVec {
             size: 0,
             values: Vec::new(),
             value_indices: Vec::new(),
@@ -123,16 +132,9 @@ impl <T: Copy> LazyArray<T> {
 }
 
 #[test]
-fn test_basic_ops() {
-    let mut a: LazyArray<i8> = LazyArray::new();
-    a.write(77, -12i8);
-    assert_eq!(a.read(77), -12i8);
-}
-
-#[test]
 #[should_panic]
 fn test_miss_off_end() {
-    let mut a: LazyArray<i8> = LazyArray::new();
+    let mut a: LazyVec<i8> = LazyVec::new();
     a.write(77, -12i8);
     let _ = a.read(78);
 }
@@ -140,7 +142,7 @@ fn test_miss_off_end() {
 #[test]
 #[should_panic]
 fn test_miss_uninit() {
-    let mut a: LazyArray<i8> = LazyArray::new();
+    let mut a: LazyVec<i8> = LazyVec::new();
     a.write(77, -12i8);
     let _ = a.read(76);
 }

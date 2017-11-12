@@ -1,5 +1,5 @@
 [package]
-name = "lazy-array"
+name = "lazy-vec"
 version = "0.1.0"
 authors = ["Bart Massey <bart.massey@gmail.com>"]
 
