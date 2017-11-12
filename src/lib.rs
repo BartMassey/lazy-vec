@@ -120,16 +120,6 @@ impl <T: Copy> LazyArray<T> {
             self.values[ix] = v
         }
     }
-
-    #[cfg(test)]
-    pub fn get_index(&self, i: usize) -> usize {
-        unsafe{ ptr::read(self.indices.ptr().offset(i as isize)) }
-    }
-
-    #[cfg(test)]
-    pub fn get_value_index(&self, ix: usize) -> usize {
-        self.value_indices[ix]
-    }
 }
 
 #[test]
