@@ -1,19 +1,24 @@
 #![feature(unique, alloc, core_intrinsics)]
+// Copyright © 2017 Bart Massey
+// [This program is licensed under the "MIT License"]
+// Please see the file LICENSE in the source
+// distribution of this software for license terms.
 
-///! A "lazy vector" is a self-initializing vector: it can be
-///! created in constant time, but still has constant-time
-///! read and write. It initializes an element on first
-///! write, and occupies space proportional to the number of
-///! written elements.
-///!
-///! # Examples
-///! ```
-///! use lazy_vec::LazyVec;
-///! 
-///! let mut a: LazyVec<i8> = LazyVec::new();
-///! a[77] = -12i8;
-///! assert_eq!(a[77], -12i8);
-///! ```
+
+//! A "lazy vector" is a self-initializing vector: it can be
+//! created in constant time, but still has constant-time
+//! read and write. It initializes an element on first
+//! write, and occupies space proportional to the number of
+//! written elements.
+//!
+//! # Examples
+//! ```
+//! use lazy_vec::LazyVec;
+//! 
+//! let mut a: LazyVec<i8> = LazyVec::new();
+//! a[77] = -12i8;
+//! assert_eq!(a[77], -12i8);
+//! ```
 
 extern crate alloc;
 
@@ -21,7 +26,7 @@ use std::ptr;
 use alloc::raw_vec::RawVec;
 use std::ops::{Index, IndexMut};
 
-///! This opaque structure stores a lazy vector.
+/// This opaque structure stores a lazy vector.
 pub struct LazyVec<T> {
     // Highest index currently stored.
     size: usize,
@@ -39,7 +44,7 @@ pub struct LazyVec<T> {
 
 impl <T: Copy> LazyVec<T> {
 
-    ///! Allocate a new empty `LazyVec`.
+    /// Allocate a new empty `LazyVec`.
     pub fn new() -> LazyVec<T> {
         LazyVec {
             size: 0,
@@ -49,8 +54,8 @@ impl <T: Copy> LazyVec<T> {
         }
     }
 
-    ///! Allocate a new empty `LazyVec` with the given
-    ///! starting index capacity.
+    /// Allocate a new empty `LazyVec` with the given
+    /// starting index capacity.
     pub fn with_capacity(cap: usize) -> LazyVec<T> {
         LazyVec {
             size: 0,
@@ -60,22 +65,22 @@ impl <T: Copy> LazyVec<T> {
         }
     }
 
-    ///! Number of elements there is currently notional
-    ///! capacity for, including uninitialized ones.
+    /// Number of elements there is currently notional
+    /// capacity for, including uninitialized ones.
     pub fn cap(&self) -> usize {
         self.indices.cap()
     }
 
-    ///! Number of elements notionally stored, including
-    ///! uninitialized ones.
+    /// Number of elements notionally stored, including
+    /// uninitialized ones.
     pub fn len(&self) -> usize {
         self.size
     }
 
-    ///! Return a reference to the value at the given index.
-    ///!
-    ///! XXX For now, panic on attempt to read from an
-    ///! uninitialized element.
+    /// Return a reference to the value at the given index.
+    ///
+    /// XXX For now, panic on attempt to read from an
+    /// uninitialized element.
     pub fn value_ref(&self, i: usize) -> &T {
         // XXX For now, fail if the value has not been
         // initialized (index off end of indices).
@@ -98,9 +103,9 @@ impl <T: Copy> LazyVec<T> {
         &self.values[ix]
     }
 
-    ///! Return a mutable reference to the value at index `i`.
-    ///! If no value previously existed, this will return a reference
-    ///! to uninitialized memory, making it unsafe.
+    /// Return a mutable reference to the value at index `i`.
+    /// If no value previously existed, this will return a reference
+    /// to uninitialized memory, making it unsafe.
     pub unsafe fn value_ref_mut(&mut self, i: usize) -> &mut T {
         // Get the current index capacity.
         let cap = self.indices.cap();
