@@ -13,9 +13,13 @@ This crate requires unstable features and is only known to
 work with Rust 1.23.0-nightly as of 2017-11-11. Later
 versions should also work.
 
-This is a work in progress. Minimal testing has been
-done. The API will be revised to include optional
-auto-initialize on first read of an element.
+This is a work in progress:
+
+* Minimal testing has been done.
+* No benchmarking has been done. Slowdowns over standard
+  `Vec` are likely quite substantial.
+* The API will be revised to include optional
+  auto-initialize on first read of an element.
 
 This program is licensed under the "MIT License".  Please
 see the file LICENSE in the source distribution of this
