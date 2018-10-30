@@ -1,1 +1,0 @@
-initSidebarItems({"struct":[["LazyVec","This opaque structure stores a lazy vector."]]});
