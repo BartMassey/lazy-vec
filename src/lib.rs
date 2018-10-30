@@ -1,9 +1,9 @@
-#![feature(unique, alloc, core_intrinsics)]
 // Copyright © 2017 Bart Massey
 // [This program is licensed under the "MIT License"]
 // Please see the file LICENSE in the source
 // distribution of this software for license terms.
 
+#![feature(raw_vec_internals, alloc, core_intrinsics)]
 
 //! A "lazy vector" is a self-initializing vector: it can be
 //! created in constant time, but still has constant-time
