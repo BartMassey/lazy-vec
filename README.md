@@ -1,6 +1,10 @@
 # LazyVec
 Copyright &copy; 2017 Bart Massey
 
+[**Deprecated** in favor of the newer
+[sivec](http://github.com/BartMassey/sivec) crate, which
+works on stable.]
+
 This Rust crate implements "lazy vectors". A lazy vector stores
 values at a sparse collection of indices, using storage
 linear in the number of stored values. Values are
